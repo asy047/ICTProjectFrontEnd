@@ -1,0 +1,115 @@
+import { View, Text, Image } from "react-native";
+import React from "react";
+import COLORS from "../constants/colors";
+import { LinearGradient } from "expo-linear-gradient";
+
+const Welcome = () => {
+  return (
+    <LinearGradient
+      style={{
+        flex: 1,
+      }}
+      colors={[COLORS.primary, COLORS.second]}
+    >
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            position: "absolute",
+            top: 70,
+            left: 30,
+            width: 100,
+            height: 100,
+            borderRadius: 10,
+            backgroundColor: "rgba(255, 255, 255, .8)",
+            transform: [{ rotate: "-5deg" }],
+          }}
+        >
+          <Image
+            source={require("../assets/welcome-person-01.png")}
+            style={{
+              width: 100,
+              height: 100,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            top: 150,
+            left: 90,
+            width: 150,
+            height: 150,
+            borderRadius: 10,
+            backgroundColor: "rgba(255, 255, 255, .9)",
+            transform: [{ rotate: "10deg" }],
+          }}
+        >
+          <Image
+            source={require("../assets/welcome-person-02.png")}
+            style={{
+              width: 150,
+              height: 150,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            top: 200,
+            right: -280,
+            width: 600,
+            height: 300,
+          }}
+        >
+          <Image
+            source={require("../assets/welcome-car.png")}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </View>
+
+        {/* contents */}
+
+        <View
+          style={{
+            paddingHorizontal: 25,
+            top: 510,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 46,
+              color: COLORS.white,
+            }}
+          >
+            시작해볼까요?
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              marginTop: 10,
+              fontWeight: "600",
+              color: COLORS.white,
+            }}
+          >
+            충전 중 전기차 화재 사고 이제 걱정마세요.
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: COLORS.white,
+            }}
+          >
+            저희와 함께하면 사고 예방할 수 있어요!
+          </Text>
+        </View>
+      </View>
+    </LinearGradient>
+  );
+};
+
+export default Welcome;
