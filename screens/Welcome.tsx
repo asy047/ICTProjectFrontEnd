@@ -1,9 +1,10 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import COLORS from "../constants/colors";
 import { LinearGradient } from "expo-linear-gradient";
+import Button from "../components/Button";
 
-const Welcome = () => {
+const Welcome = ({ navigation }) => {
   return (
     <LinearGradient
       style={{
@@ -85,6 +86,15 @@ const Welcome = () => {
               color: COLORS.white,
             }}
           >
+            같이,
+          </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 46,
+              color: COLORS.white,
+            }}
+          >
             시작해볼까요?
           </Text>
           <Text
@@ -106,6 +116,45 @@ const Welcome = () => {
           >
             저희와 함께하면 사고 예방할 수 있어요!
           </Text>
+          <Button
+            title="가입하기"
+            onPress={() => navigation.navigate("Signup")}
+            color={COLORS.white}
+            textColor={COLORS.second}
+            style={{
+              marginTop: 40,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 10,
+              justifyContent: "center",
+              alignItems: "baseline",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "500",
+                color: COLORS.white,
+              }}
+            >
+              이미 계정이 있으신가요?
+            </Text>
+            <Pressable onPress={() => navigation.navigate("Login")}>
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: COLORS.white,
+                }}
+              >
+                로그인
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </LinearGradient>
