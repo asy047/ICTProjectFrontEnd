@@ -1,32 +1,47 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import React from "react";
+// components/Button.js
+import React, { useState } from "react";
+import { Pressable, Text, StyleSheet } from "react-native";
 import COLORS from "../constants/colors";
 
-const Button = (props) => {
-  //  props = [ filled, color, textColor ]
-  const filledBgColor = props.color || COLORS.primary;
+interface ButtonProps {
+  title: string;
+  color?: string;
+  textColor?: string;
+  style?: any; // Replace 'any' with a proper type for your style object
+  onPress: () => void;
+}
+
+const Button = ({ title, onPress, color, textColor, style }: ButtonProps) => {
+  const [isPressed, setIsPressed] = useState(false);
+
+  const filledBgColor = color || COLORS.primary;
   const outlinedColor = COLORS.white;
-
-  const bgColor = props.filled ? filledBgColor : outlinedColor;
-  const textColor = props.filled ? COLORS.white : COLORS.primary;
-
-  const setTextColor = props.textColor ? props.textColor : textColor;
+  const bgColor = color ? filledBgColor : outlinedColor;
+  const setTextColor = textColor || (color ? COLORS.white : COLORS.primary);
 
   return (
-    <TouchableOpacity
-      style={{
-        ...styles.button,
-        ...{ backgroundColor: bgColor },
-        ...{ borderColor: filledBgColor },
-        ...props.style,
-      }}
+    <Pressable
+      style={({ pressed }) => [
+        styles.button,
+        {
+          backgroundColor: pressed ? setTextColor || COLORS.primary : bgColor,
+          borderColor: pressed ? setTextColor || COLORS.primary : filledBgColor,
+        },
+        style,
+      ]}
+      onPress={onPress}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
     >
       <Text
-        style={{ fontSize: 18, ...{ color: setTextColor }, fontWeight: "800" }}
+        style={[
+          styles.buttonText,
+          { color: isPressed ? bgColor : setTextColor },
+        ]}
       >
-        {props.title}
+        {title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -39,6 +54,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
