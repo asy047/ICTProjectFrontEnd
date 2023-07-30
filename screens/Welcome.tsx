@@ -117,8 +117,10 @@ const Welcome = ({ navigation }) => {
             저희와 함께하면 사고 예방할 수 있어요!
           </Text>
           <Button
-            title="가입하기"
-            onPress={() => navigation.navigate("Signup")}
+            onPress={() => {
+              navigation.navigate("Signup");
+            }}
+            title="시작하기"
             color={COLORS.white}
             textColor={COLORS.second}
             style={{
