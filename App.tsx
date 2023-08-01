@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 import { Welcome, Signup, Login } from "./screens";
 import Home from "./components/Home";
+import COLORS from "./constants/colors";
 
 export default function App() {
   return (
@@ -23,7 +24,7 @@ export default function App() {
           name="Login"
           component={Login}
           options={{
-            headerShown: false,
+            headerShown: true,
           }}
         />
         <Stack.Screen
@@ -31,6 +32,12 @@ export default function App() {
           component={Signup}
           options={{
             headerShown: true,
+            title: "회원가입",
+            headerTintColor: COLORS.second,
+            headerTitleStyle: {
+              fontWeight: "bold",
+              color: COLORS.black,
+            },
           }}
         />
       </Stack.Navigator>

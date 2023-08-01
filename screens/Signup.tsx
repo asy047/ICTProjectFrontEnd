@@ -42,10 +42,10 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
+      {/* <View
         style={{
           flex: 1,
-          // backgroundColor: "tomato",
+          backgroundColor: "tomato",
         }}
       >
         <View style={styles.headLineArea}>
@@ -54,15 +54,14 @@ const Signup = () => {
               fontSize: 36,
             }}
           >
-            기본 회원 정보
+            회원가입
           </Text>
         </View>
         <Text></Text>
-      </View>
+      </View> */}
       <View
         style={{
           flex: 4,
-          // backgroundColor: "cyan",
         }}
       >
         <View
@@ -76,6 +75,7 @@ const Signup = () => {
             onValueChange={(value) => setAptName(value)}
             items={DATA}
             style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
           />
         </View>
 
@@ -83,17 +83,20 @@ const Signup = () => {
           {/* Name Input */}
           <TextInput
             style={styles.TextInputStyle}
-            outlineColor={COLORS.second}
-            activeOutlineColor={COLORS.second}
+            underlineColor={COLORS.second}
+            activeUnderlineColor={COLORS.second}
             selectionColor={COLORS.primary}
             label="성함"
             placeholder="성함을 입력해주세요."
-            mode="outlined"
             value={name}
             onChangeText={(text) => setName(text)}
           />
           <HelperText
-            style={{ color: COLORS.second }}
+            style={[
+              hasBlank(name)
+                ? { color: COLORS.highlight }
+                : { color: COLORS.second },
+            ]}
             type={hasBlank(name) ? "error" : "info"}
             visible={name !== ""}
           >
@@ -104,18 +107,21 @@ const Signup = () => {
           {/* PhoneNumber Input */}
           <TextInput
             style={styles.TextInputStyle}
-            outlineColor={COLORS.second}
-            activeOutlineColor={COLORS.second}
+            underlineColor={COLORS.second}
+            activeUnderlineColor={COLORS.second}
             selectionColor={COLORS.primary}
             label="휴대폰 번호"
             placeholder="숫자만 입력해주세요."
             keyboardType="numeric"
-            mode="outlined"
             value={phoneNum}
             onChangeText={(text) => setPhoneNum(text)}
           />
           <HelperText
-            style={{ color: COLORS.second }}
+            style={[
+              hasHypen(phoneNum)
+                ? { color: COLORS.highlight }
+                : { color: COLORS.second },
+            ]}
             type={hasHypen(phoneNum) ? "error" : "info"}
             visible={phoneNum !== ""}
           >
@@ -126,17 +132,20 @@ const Signup = () => {
           {/* CarNum Input */}
           <TextInput
             style={styles.TextInputStyle}
-            outlineColor={COLORS.second}
-            activeOutlineColor={COLORS.second}
+            underlineColor={COLORS.second}
+            activeUnderlineColor={COLORS.second}
             selectionColor={COLORS.primary}
             placeholder="띄어쓰기를 제외하고 입력해주세요."
             label="자동차 번호"
-            mode="outlined"
             value={carNum}
             onChangeText={(text) => setCarNum(text)}
           />
           <HelperText
-            style={{ color: COLORS.second }}
+            style={[
+              hasBlank(carNum)
+                ? { color: COLORS.highlight }
+                : { color: COLORS.second },
+            ]}
             type={hasBlank(carNum) ? "error" : "info"}
             visible={carNum !== ""}
           >
@@ -204,7 +213,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 14,
     backgroundColor: COLORS.white,
-    borderWidth: 1,
+    borderBottomWidth: 0.5,
     borderColor: COLORS.second,
     borderRadius: 4,
     color: COLORS.black,
@@ -212,13 +221,15 @@ const pickerSelectStyles = StyleSheet.create({
   },
   inputAndroid: {
     fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: "purple",
-    borderRadius: 8,
-    color: "black",
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    backgroundColor: COLORS.white,
+    borderBottomWidth: 1,
+    borderColor: COLORS.second,
+    borderRadius: 4,
+    color: COLORS.black,
     paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
+
 export default Signup;
