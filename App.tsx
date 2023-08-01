@@ -30,7 +30,7 @@ export default function App() {
           name="Signup"
           component={Signup}
           options={{
-            headerShown: false,
+            headerShown: true,
           }}
         />
       </Stack.Navigator>

@@ -33,8 +33,11 @@ const Signup = () => {
   const [carNum, setCarNum] = React.useState("");
   const [phoneNum, setPhoneNum] = React.useState("");
 
-  const hasErrors = () => {
-    return !text.includes("@");
+  const hasBlank = (text: string) => {
+    return text.includes(" ");
+  };
+  const hasHypen = (text: string) => {
+    return text.includes("-");
   };
 
   return (
@@ -45,14 +48,15 @@ const Signup = () => {
           // backgroundColor: "tomato",
         }}
       >
-        <Text
-          style={{
-            fontSize: 36,
-            textAlign: "center",
-          }}
-        >
-          기본 회원 정보
-        </Text>
+        <View style={styles.headLineArea}>
+          <Text
+            style={{
+              fontSize: 36,
+            }}
+          >
+            기본 회원 정보
+          </Text>
+        </View>
         <Text></Text>
       </View>
       <View
@@ -61,38 +65,48 @@ const Signup = () => {
           // backgroundColor: "cyan",
         }}
       >
-        <View style={[styles.TextInputStyle, { borderRadius: 4 }]}>
+        <View
+          style={[styles.TextInputStyle, { borderRadius: 4, marginBottom: 20 }]}
+        >
           <RNPickerSelect
             placeholder={{
               label: "아파트를 선택해주세요.",
               value: null,
             }}
-            onValueChange={(value) => console.log(value)}
+            onValueChange={(value) => setAptName(value)}
             items={DATA}
             style={pickerSelectStyles}
           />
         </View>
 
         <PaperProvider>
+          {/* Name Input */}
           <TextInput
+            style={styles.TextInputStyle}
             outlineColor={COLORS.second}
             activeOutlineColor={COLORS.second}
             selectionColor={COLORS.primary}
-            style={styles.TextInputStyle}
             label="성함"
             placeholder="성함을 입력해주세요."
             mode="outlined"
             value={name}
             onChangeText={(text) => setName(text)}
           />
-          <HelperText type="error" visible={hasErrors()}>
-            Email address is invalid!
+          <HelperText
+            style={{ color: COLORS.second }}
+            type={hasBlank(name) ? "error" : "info"}
+            visible={name !== ""}
+          >
+            {hasBlank(name)
+              ? "띄어쓰기를 제외하고 입력해주세요!"
+              : "멋진 이름이네요!"}
           </HelperText>
+          {/* PhoneNumber Input */}
           <TextInput
+            style={styles.TextInputStyle}
             outlineColor={COLORS.second}
             activeOutlineColor={COLORS.second}
             selectionColor={COLORS.primary}
-            style={styles.TextInputStyle}
             label="휴대폰 번호"
             placeholder="숫자만 입력해주세요."
             keyboardType="numeric"
@@ -100,17 +114,34 @@ const Signup = () => {
             value={phoneNum}
             onChangeText={(text) => setPhoneNum(text)}
           />
+          <HelperText
+            style={{ color: COLORS.second }}
+            type={hasHypen(phoneNum) ? "error" : "info"}
+            visible={phoneNum !== ""}
+          >
+            {hasHypen(phoneNum)
+              ? "-, 하이픈을 제외하고 입력해주세요!"
+              : "좋아요!"}
+          </HelperText>
+          {/* CarNum Input */}
           <TextInput
+            style={styles.TextInputStyle}
             outlineColor={COLORS.second}
             activeOutlineColor={COLORS.second}
             selectionColor={COLORS.primary}
-            style={styles.TextInputStyle}
             placeholder="띄어쓰기를 제외하고 입력해주세요."
             label="자동차 번호"
             mode="outlined"
             value={carNum}
             onChangeText={(text) => setCarNum(text)}
           />
+          <HelperText
+            style={{ color: COLORS.second }}
+            type={hasBlank(carNum) ? "error" : "info"}
+            visible={carNum !== ""}
+          >
+            {hasBlank(carNum) ? "띄어쓰기를 제외하고 입력해주세요!" : "좋아요!"}
+          </HelperText>
           <View
             style={{
               flexDirection: "row",
@@ -149,18 +180,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.white,
   },
   headLineArea: {
     flex: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
   formArea: {
     flex: 3,
   },
   TextInputStyle: {
+    marginTop: 10,
     backgroundColor: COLORS.white,
     color: COLORS.black,
-    marginBottom: 15,
   },
 });
 
