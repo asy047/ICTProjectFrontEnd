@@ -147,6 +147,7 @@ const Signup = () => {
               flexDirection: "row",
             }}
           >
+            {/* 빈커밋 */}
             <TextInput
               style={[styles.TextInputStyle, { flex: 1, marginRight: 5 }]}
               outlineColor={COLORS.second}
