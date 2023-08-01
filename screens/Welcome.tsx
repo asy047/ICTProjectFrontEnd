@@ -3,6 +3,7 @@ import React from "react";
 import COLORS from "../constants/colors";
 import { LinearGradient } from "expo-linear-gradient";
 import Button from "../components/Button";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const Welcome = ({ navigation }) => {
   return (
@@ -12,71 +13,75 @@ const Welcome = ({ navigation }) => {
       }}
       colors={[COLORS.primary, COLORS.second]}
     >
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-            position: "absolute",
-            top: 70,
-            left: 30,
-            width: 100,
-            height: 100,
-            borderRadius: 10,
-            backgroundColor: "rgba(255, 255, 255, .8)",
-            transform: [{ rotate: "-5deg" }],
-          }}
-        >
-          <Image
-            source={require("../assets/welcome-person-01.png")}
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 4 }}>
+          <View
             style={{
+              position: "absolute",
+              top: 30,
+              left: 30,
               width: 100,
               height: 100,
+              borderRadius: 10,
+              backgroundColor: "rgba(255, 255, 255, .8)",
+              transform: [{ rotate: "-5deg" }],
             }}
-          />
-        </View>
-        <View
-          style={{
-            position: "absolute",
-            top: 150,
-            left: 90,
-            width: 150,
-            height: 150,
-            borderRadius: 10,
-            backgroundColor: "rgba(255, 255, 255, .9)",
-            transform: [{ rotate: "10deg" }],
-          }}
-        >
-          <Image
-            source={require("../assets/welcome-person-02.png")}
+          >
+            <Image
+              source={require("../assets/welcome-person-01.png")}
+              style={{
+                width: 100,
+                height: 100,
+              }}
+            />
+          </View>
+          <View
             style={{
+              position: "absolute",
+              top: 100,
+              left: 90,
               width: 150,
               height: 150,
+              borderRadius: 10,
+              backgroundColor: "rgba(255, 255, 255, .9)",
+              transform: [{ rotate: "10deg" }],
             }}
-          />
-        </View>
-        <View
-          style={{
-            position: "absolute",
-            top: 200,
-            right: -280,
-            width: 600,
-            height: 300,
-          }}
-        >
-          <Image
-            source={require("../assets/welcome-car.png")}
+          >
+            <Image
+              source={require("../assets/welcome-person-02.png")}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
+          </View>
+          <View
             style={{
-              width: "100%",
-              height: "100%",
+              position: "absolute",
+              top: 150,
+              right: -280,
+              width: 600,
+              height: 300,
             }}
-          />
+          >
+            <Image
+              source={require("../assets/welcome-car.png")}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </View>
         </View>
 
         {/* contents */}
 
         <View
           style={{
+            flex: 3,
+            // backgroundColor: "blue",
             paddingHorizontal: 25,
-            top: 510,
+            justifyContent: "center",
           }}
         >
           <Text
@@ -124,7 +129,7 @@ const Welcome = ({ navigation }) => {
             color={COLORS.white}
             textColor={COLORS.second}
             style={{
-              marginTop: 40,
+              marginTop: 20,
             }}
           />
           <View
@@ -158,7 +163,7 @@ const Welcome = ({ navigation }) => {
             </Pressable>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 };
