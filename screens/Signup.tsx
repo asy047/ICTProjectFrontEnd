@@ -1,13 +1,14 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import {
   HelperText,
   TextInput,
   Provider as PaperProvider,
 } from "react-native-paper";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RNPickerSelect from "react-native-picker-select";
 import COLORS from "../constants/colors";
+import Button from "../components/Button";
 
 interface SignupData {
   name: string; // Name
@@ -19,25 +20,45 @@ interface SignupData {
 }
 
 const DATA = [
-  { label: "세양청마루아파트", value: "1001" },
-  { label: "마젤란아파트", value: "1002" },
-  { label: "리가아파트", value: "1003" },
-  { label: "목동블랙하이츠", value: "1004" },
+  { label: "세양청마루아파트", value: "세양청마루아파트" },
+  { label: "마젤란아파트", value: "마젤란아파트" },
+  { label: "리가아파트", value: "리가아파트" },
+  { label: "목동블랙하이츠", value: "목동블랙하이츠" },
 ];
 
 const Signup = () => {
-  const [name, setName] = React.useState("");
   const [aptName, setAptName] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [phoneNum, setPhoneNum] = React.useState("");
+  const [carNum, setCarNum] = React.useState("");
   const [dong, setDong] = React.useState("");
   const [hosu, setHosu] = React.useState("");
-  const [carNum, setCarNum] = React.useState("");
-  const [phoneNum, setPhoneNum] = React.useState("");
+
+  const [isValName, setIsValName] = React.useState(false);
+  const [isValPhoneNum, setIsValPhoneNum] = React.useState(false);
+  const [isValCarNum, setIsValCarNum] = React.useState(false);
+  const [isValDong, setIsValDong] = React.useState(false);
+  const [isValHosu, setIsValHosu] = React.useState(false);
+
+  const [disabled, setDisabled] = React.useState(true);
+
+  useEffect(() => {
+    !isValName && !isValPhoneNum && !isValCarNum
+      ? setDisabled(false)
+      : setDisabled(true);
+    console.log(disabled, isValCarNum);
+  }, [name, phoneNum, carNum]);
 
   const hasBlank = (text: string) => {
     return text.includes(" ");
   };
   const hasHypen = (text: string) => {
     return text.includes("-");
+  };
+  const submitSignup = () => {
+    isValName && isValPhoneNum && isValCarNum
+      ? Alert.alert(`입력하신 정보가 맞습니까?`, `성함: ${name}`)
+      : Alert.alert("입력하신 정보를 다시 한 번 확인해주세요.");
   };
 
   return (
@@ -81,6 +102,7 @@ const Signup = () => {
 
         <PaperProvider>
           {/* Name Input */}
+          {/* <FormTextInput /> */}
           <TextInput
             style={styles.TextInputStyle}
             underlineColor={COLORS.second}
@@ -89,18 +111,21 @@ const Signup = () => {
             label="성함"
             placeholder="성함을 입력해주세요."
             value={name}
-            onChangeText={(text) => setName(text)}
+            onChangeText={(text) => {
+              setIsValName(hasBlank(text));
+              setName(text);
+            }}
           />
           <HelperText
             style={[
-              hasBlank(name)
+              isValName
                 ? { color: COLORS.highlight }
                 : { color: COLORS.second },
             ]}
-            type={hasBlank(name) ? "error" : "info"}
+            type={isValName ? "error" : "info"}
             visible={name !== ""}
           >
-            {hasBlank(name)
+            {isValName
               ? "띄어쓰기를 제외하고 입력해주세요!"
               : "멋진 이름이네요!"}
           </HelperText>
@@ -114,20 +139,21 @@ const Signup = () => {
             placeholder="숫자만 입력해주세요."
             keyboardType="numeric"
             value={phoneNum}
-            onChangeText={(text) => setPhoneNum(text)}
+            onChangeText={(text) => {
+              setIsValPhoneNum(hasHypen(text));
+              setPhoneNum(text);
+            }}
           />
           <HelperText
             style={[
-              hasHypen(phoneNum)
+              isValPhoneNum
                 ? { color: COLORS.highlight }
                 : { color: COLORS.second },
             ]}
-            type={hasHypen(phoneNum) ? "error" : "info"}
+            type={isValPhoneNum ? "error" : "info"}
             visible={phoneNum !== ""}
           >
-            {hasHypen(phoneNum)
-              ? "-, 하이픈을 제외하고 입력해주세요!"
-              : "좋아요!"}
+            {isValPhoneNum ? "-, 하이픈을 제외하고 입력해주세요!" : "좋아요!"}
           </HelperText>
           {/* CarNum Input */}
           <TextInput
@@ -138,18 +164,21 @@ const Signup = () => {
             placeholder="띄어쓰기를 제외하고 입력해주세요."
             label="자동차 번호"
             value={carNum}
-            onChangeText={(text) => setCarNum(text)}
+            onChangeText={(text) => {
+              setIsValCarNum(hasBlank(text));
+              setCarNum(text);
+            }}
           />
           <HelperText
             style={[
-              hasBlank(carNum)
+              isValCarNum
                 ? { color: COLORS.highlight }
                 : { color: COLORS.second },
             ]}
-            type={hasBlank(carNum) ? "error" : "info"}
+            type={isValCarNum ? "error" : "info"}
             visible={carNum !== ""}
           >
-            {hasBlank(carNum) ? "띄어쓰기를 제외하고 입력해주세요!" : "좋아요!"}
+            {isValCarNum ? "띄어쓰기를 제외하고 입력해주세요!" : "좋아요!"}
           </HelperText>
           <View
             style={{
@@ -159,28 +188,43 @@ const Signup = () => {
             {/* 빈커밋 */}
             <TextInput
               style={[styles.TextInputStyle, { flex: 1, marginRight: 5 }]}
-              outlineColor={COLORS.second}
-              activeOutlineColor={COLORS.second}
+              underlineColor={COLORS.second}
+              activeUnderlineColor={COLORS.second}
               selectionColor={COLORS.primary}
               label="동"
               keyboardType="numeric" // 숫자 키패드 설정
-              mode="outlined"
               value={dong}
               onChangeText={(text) => setDong(text)}
             />
             <TextInput
               style={[styles.TextInputStyle, { flex: 1, marginLeft: 5 }]}
-              outlineColor={COLORS.second}
-              activeOutlineColor={COLORS.second}
+              underlineColor={COLORS.second}
+              activeUnderlineColor={COLORS.second}
               selectionColor={COLORS.primary}
               label="호수"
               keyboardType="numeric" // 숫자 키패드 설정
-              mode="outlined"
               value={hosu}
               onChangeText={(text) => setHosu(text)}
             />
           </View>
         </PaperProvider>
+      </View>
+      <View
+        style={{
+          flex: 2,
+        }}
+      >
+        <Button
+          onPress={() => {
+            submitSignup();
+          }}
+          disabled={disabled}
+          title="완료"
+          color={disabled ? COLORS.grey : COLORS.primary}
+          style={{
+            marginTop: 20,
+          }}
+        />
       </View>
     </SafeAreaView>
   );

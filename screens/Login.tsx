@@ -1,17 +1,25 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import COLORS from "../constants/colors";
 
 const Login = () => {
+  const [name, setName] = React.useState("");
+  const [carNum, setCarNum] = React.useState("");
+  const [phoneNum, setPhoneNum] = React.useState("");
+
   return (
-    <View>
-      <Text>Login</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View></View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 10,
+    backgroundColor: COLORS.white,
   },
 });
 

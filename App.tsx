@@ -25,6 +25,12 @@ export default function App() {
           component={Login}
           options={{
             headerShown: true,
+            title: "로그인",
+            headerTintColor: COLORS.second,
+            headerTitleStyle: {
+              fontWeight: "bold",
+              color: COLORS.black,
+            },
           }}
         />
         <Stack.Screen
