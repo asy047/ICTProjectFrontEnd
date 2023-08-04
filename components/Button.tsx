@@ -9,9 +9,17 @@ interface ButtonProps {
   textColor?: string;
   style?: any; // Replace 'any' with a proper type for your style object
   onPress: () => void;
+  disabled: boolean;
 }
 
-const Button = ({ title, onPress, color, textColor, style }: ButtonProps) => {
+const Button = ({
+  title,
+  onPress,
+  color,
+  textColor,
+  style,
+  disabled,
+}: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
 
   const filledBgColor = color || COLORS.primary;
@@ -32,6 +40,7 @@ const Button = ({ title, onPress, color, textColor, style }: ButtonProps) => {
       onPress={onPress}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
+      disabled={disabled}
     >
       <Text
         style={[
