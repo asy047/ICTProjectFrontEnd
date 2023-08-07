@@ -41,14 +41,99 @@ const Signup = () => {
   const [isValDong, setIsValDong] = React.useState(false);
   const [isValHosu, setIsValHosu] = React.useState(false);
 
+  const [inputs, setInputs] = React.useState({
+    aptName: {
+      value: "",
+      isValid: false,
+    },
+    name: {
+      value: "",
+      isValid: false,
+    },
+    phoneNum: {
+      value: "",
+      isValid: false,
+    },
+    carNum: {
+      value: "",
+      isValid: false,
+    },
+    dong: {
+      value: "",
+      isValid: false,
+    },
+    hosu: {
+      value: "",
+      isValid: false,
+    },
+  });
+
+  // 유지 보수를 위한 유효성 검사 캡슐화
+  const validateName = (text: string) => {
+    return !text.includes(" ");
+  };
+
+  const validatePhoneNum = (text: string) => {
+    return !text.includes("-");
+  };
+
+  const validateCarNum = (text: string) => {
+    return !text.includes(" ");
+  };
+  const validateDong = (text: string) => {
+    return !(text === "0");
+  };
+  const validateHosu = (text: string) => {
+    return !text[0];
+  };
+
+  // 보편적인 방법으로 Input 처리하기.
+  //enteredValue는 ReactNative가 준 값
+  const inputChangeHandler = (
+    inputIdentifier: string,
+    enteredValue: string
+  ) => {
+    setInputs((curInputs) => {
+      let isValid = true;
+
+      switch (inputIdentifier) {
+        case "name":
+          isValid = validateName(enteredValue);
+          break;
+        case "phoneNum":
+          isValid = validatePhoneNum(enteredValue);
+          break;
+        case "carNum":
+          isValid = validateCarNum(enteredValue);
+          break;
+        case "dong":
+          isValid = validateDong(enteredValue);
+          if (isValDong) return 0;
+        default:
+          break;
+      }
+      return {
+        ...curInputs, //inputIndentifier
+        [inputIdentifier]: {
+          value: enteredValue,
+          isValid:
+            inputIdentifier === "phoneNum"
+              ? hasHypen(enteredValue)
+              : hasBlank(enteredValue),
+        }, //프로퍼티 동적 할당
+      };
+    });
+  };
+
   const [visible, setVisible] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
 
   useEffect(() => {
-    isValName && isValPhoneNum && isValCarNum && isValDong && isValHosu
-      ? setDisabled(false)
-      : setDisabled(true);
-  }, [aptName, name, phoneNum, carNum, dong, hosu]);
+    // isValName && isValPhoneNum && isValCarNum && isValDong && isValHosu
+    //   ? setDisabled(false)
+    //   : setDisabled(true);
+    console.log(inputs.aptName, inputs.name.isValid, inputs.dong.isValid);
+  }, [inputs.aptName, inputs.name, phoneNum, carNum, inputs.dong, hosu]);
 
   const hasBlank = (text: string) => {
     return !text.includes(" ");
@@ -76,23 +161,6 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View
-        style={{
-          flex: 1,
-          backgroundColor: "tomato",
-        }}
-      >
-        <View style={styles.headLineArea}>
-          <Text
-            style={{
-              fontSize: 36,
-            }}
-          >
-            회원가입
-          </Text>
-        </View>
-        <Text></Text>
-      </View> */}
       <View
         style={{
           flex: 4,
@@ -106,13 +174,7 @@ const Signup = () => {
               label: "아파트를 선택해주세요.",
               value: null,
             }}
-            onValueChange={(value) => {
-              if (value === null) setIsValAptName(false);
-              else {
-                setIsValAptName(true);
-                setAptName(value);
-              }
-            }}
+            onValueChange={inputChangeHandler.bind(this, "aptName")} //bind로 객체 자체를 불러오기
             items={DATA}
             style={pickerSelectStyles}
             useNativeAndroidPickerStyle={false}
@@ -129,16 +191,12 @@ const Signup = () => {
             selectionColor={COLORS.primary}
             label="성함"
             placeholder="성함을 입력해주세요."
-            value={name}
-            onChangeText={(text) => {
-              setIsValName(hasBlank(text));
-              if (text === "") setIsValName(false);
-              setName(text);
-            }}
+            value={inputs.name.value}
+            onChangeText={inputChangeHandler.bind(this, "name")}
           />
           <HelperText
             style={[
-              isValName
+              inputs.name.isValid
                 ? { color: COLORS.second }
                 : { color: COLORS.highlight },
             ]}
@@ -216,16 +274,8 @@ const Signup = () => {
                 selectionColor={COLORS.primary}
                 label="동"
                 keyboardType="numeric" // 숫자 키패드 설정
-                value={dong}
-                onChangeText={(text) => {
-                  setVisible(true);
-                  if (text === "0") {
-                    setIsValDong(false);
-                  } else {
-                    setDong(text);
-                    setIsValDong(true);
-                  }
-                }}
+                value={inputs.dong.value}
+                onChangeText={inputChangeHandler.bind(this, "dong")}
               />
               <HelperText
                 style={[
