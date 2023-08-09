@@ -27,13 +27,6 @@ const DATA = [
 ];
 
 const Signup = () => {
-  const [aptName, setAptName] = React.useState("");
-  const [name, setName] = React.useState("");
-  const [phoneNum, setPhoneNum] = React.useState("");
-  const [carNum, setCarNum] = React.useState("");
-  const [dong, setDong] = React.useState("");
-  const [hosu, setHosu] = React.useState("");
-
   const [inputs, setInputs] = React.useState({
     aptName: {
       value: "",
@@ -118,38 +111,29 @@ const Signup = () => {
     });
   };
 
-  const [visible, setVisible] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
 
   useEffect(() => {
-    // isValName && isValPhoneNum && isValCarNum && isValDong && isValHosu
-    //   ? setDisabled(false)
-    //   : setDisabled(true);
-    console.log("dong", inputs.dong.isValid, inputs.dong.value);
-  }, [inputs.aptName, inputs.name, phoneNum, carNum, inputs.dong, inputs.hosu]);
-
-  const hasBlank = (text: string) => {
-    return !text.includes(" ");
-  };
-  const hasHypen = (text: string) => {
-    return !text.includes("-");
-  };
-  const submitSignup = () => {
     inputs.aptName.isValid &&
     inputs.name.isValid &&
     inputs.phoneNum.isValid &&
     inputs.carNum.isValid &&
     inputs.dong.isValid &&
     inputs.hosu.isValid
-      ? Alert.alert(`입력하신 정보가 맞습니까?`, `맞다면 확인을 눌러주세요.`, [
-          {
-            text: "취소",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
-          },
-          { text: "확인", onPress: () => console.log("OK Pressed") },
-        ])
-      : Alert.alert("입력하신 정보를 다시 한 번 확인해주세요.");
+      ? setDisabled(false)
+      : setDisabled(true);
+    console.log("dong", inputs.dong.isValid, inputs.dong.value);
+  }, [inputs.aptName, inputs.name, inputs.dong, inputs.hosu]);
+
+  const submitSignup = () => {
+    Alert.alert(`입력하신 정보가 맞습니까?`, `맞다면 확인을 눌러주세요.`, [
+      {
+        text: "취소",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "확인", onPress: () => console.log("OK Pressed") },
+    ]);
   };
 
   return (
