@@ -34,13 +34,6 @@ const Signup = () => {
   const [dong, setDong] = React.useState("");
   const [hosu, setHosu] = React.useState("");
 
-  const [isValAptName, setIsValAptName] = React.useState(false);
-  const [isValName, setIsValName] = React.useState(false);
-  const [isValPhoneNum, setIsValPhoneNum] = React.useState(false);
-  const [isValCarNum, setIsValCarNum] = React.useState(false);
-  const [isValDong, setIsValDong] = React.useState(false);
-  const [isValHosu, setIsValHosu] = React.useState(false);
-
   const [inputs, setInputs] = React.useState({
     aptName: {
       value: "",
@@ -84,7 +77,7 @@ const Signup = () => {
     return !(text === "0");
   };
   const validateHosu = (text: string) => {
-    return !text[0];
+    return !(text === "0");
   };
 
   // 보편적인 방법으로 Input 처리하기.
@@ -108,7 +101,10 @@ const Signup = () => {
           break;
         case "dong":
           isValid = validateDong(enteredValue);
-          if (isValDong) return 0;
+          break;
+        case "hosu":
+          isValid = validateHosu(enteredValue);
+          break;
         default:
           break;
       }
@@ -116,10 +112,7 @@ const Signup = () => {
         ...curInputs, //inputIndentifier
         [inputIdentifier]: {
           value: enteredValue,
-          isValid:
-            inputIdentifier === "phoneNum"
-              ? hasHypen(enteredValue)
-              : hasBlank(enteredValue),
+          isValid: isValid,
         }, //프로퍼티 동적 할당
       };
     });
@@ -132,8 +125,8 @@ const Signup = () => {
     // isValName && isValPhoneNum && isValCarNum && isValDong && isValHosu
     //   ? setDisabled(false)
     //   : setDisabled(true);
-    console.log(inputs.aptName, inputs.name.isValid, inputs.dong.isValid);
-  }, [inputs.aptName, inputs.name, phoneNum, carNum, inputs.dong, hosu]);
+    console.log("dong", inputs.dong.isValid, inputs.dong.value);
+  }, [inputs.aptName, inputs.name, phoneNum, carNum, inputs.dong, inputs.hosu]);
 
   const hasBlank = (text: string) => {
     return !text.includes(" ");
@@ -142,12 +135,12 @@ const Signup = () => {
     return !text.includes("-");
   };
   const submitSignup = () => {
-    isValAptName &&
-    isValName &&
-    isValPhoneNum &&
-    isValCarNum &&
-    isValDong &&
-    isValHosu
+    inputs.aptName.isValid &&
+    inputs.name.isValid &&
+    inputs.phoneNum.isValid &&
+    inputs.carNum.isValid &&
+    inputs.dong.isValid &&
+    inputs.hosu.isValid
       ? Alert.alert(`입력하신 정보가 맞습니까?`, `맞다면 확인을 눌러주세요.`, [
           {
             text: "취소",
@@ -200,10 +193,10 @@ const Signup = () => {
                 ? { color: COLORS.second }
                 : { color: COLORS.highlight },
             ]}
-            type={isValName ? "info" : "error"}
-            visible={name !== ""}
+            type={inputs.name.isValid ? "info" : "error"}
+            visible={inputs.name.value !== ""}
           >
-            {isValName
+            {inputs.name.isValid
               ? "멋진 이름이네요!"
               : "띄어쓰기를 제외하고 입력해주세요!"}
           </HelperText>
@@ -216,23 +209,21 @@ const Signup = () => {
             label="휴대폰 번호"
             placeholder="숫자만 입력해주세요."
             keyboardType="numeric"
-            value={phoneNum}
-            onChangeText={(text) => {
-              setIsValPhoneNum(hasHypen(text));
-              if (text === "") setIsValPhoneNum(false);
-              setPhoneNum(text);
-            }}
+            value={inputs.phoneNum.value}
+            onChangeText={inputChangeHandler.bind(this, "phoneNum")}
           />
           <HelperText
             style={[
-              isValPhoneNum
+              inputs.phoneNum.isValid
                 ? { color: COLORS.second }
                 : { color: COLORS.highlight },
             ]}
-            type={isValPhoneNum ? "info" : "error"}
-            visible={phoneNum !== ""}
+            type={inputs.phoneNum.isValid ? "info" : "error"}
+            visible={inputs.phoneNum.value !== ""}
           >
-            {isValPhoneNum ? "좋아요!" : "-, 하이픈을 제외하고 입력해주세요!"}
+            {inputs.phoneNum.isValid
+              ? "좋아요!"
+              : "-, 하이픈을 제외하고 입력해주세요!"}
           </HelperText>
           {/* CarNum Input */}
           <TextInput
@@ -242,23 +233,21 @@ const Signup = () => {
             selectionColor={COLORS.primary}
             placeholder="띄어쓰기를 제외하고 입력해주세요."
             label="자동차 번호"
-            value={carNum}
-            onChangeText={(text) => {
-              setIsValCarNum(hasBlank(text));
-              if (text === "") setIsValCarNum(false);
-              setCarNum(text);
-            }}
+            value={inputs.carNum.value}
+            onChangeText={inputChangeHandler.bind(this, "carNum")}
           />
           <HelperText
             style={[
-              isValCarNum
+              inputs.carNum.isValid
                 ? { color: COLORS.second }
                 : { color: COLORS.highlight },
             ]}
-            type={isValCarNum ? "info" : "error"}
-            visible={carNum !== ""}
+            type={inputs.carNum.isValid ? "info" : "error"}
+            visible={inputs.carNum.value !== ""}
           >
-            {isValCarNum ? "좋아요!" : "띄어쓰기를 제외하고 입력해주세요!"}
+            {inputs.carNum.isValid
+              ? "좋아요!"
+              : "띄어쓰기를 제외하고 입력해주세요!"}
           </HelperText>
           <View
             style={{
@@ -279,14 +268,14 @@ const Signup = () => {
               />
               <HelperText
                 style={[
-                  isValDong
+                  inputs.dong.isValid
                     ? { color: COLORS.second }
                     : { color: COLORS.highlight },
                 ]}
-                type={isValDong ? "info" : "error"}
-                visible={visible}
+                type={inputs.dong.isValid ? "info" : "error"}
+                visible={inputs.dong.value !== ""}
               >
-                {isValDong ? "좋아요!" : "0으로 시작할 수 없습니다."}
+                {inputs.dong.isValid ? "좋아요!" : "0으로 시작할 수 없습니다."}
               </HelperText>
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
@@ -297,26 +286,19 @@ const Signup = () => {
                 selectionColor={COLORS.primary}
                 label="호수"
                 keyboardType="numeric" // 숫자 키패드 설정
-                value={hosu}
-                onChangeText={(text) => {
-                  if (text === "0") {
-                    setIsValHosu(false);
-                  } else {
-                    setHosu(text);
-                    setIsValHosu(true);
-                  }
-                }}
+                value={inputs.hosu.value}
+                onChangeText={inputChangeHandler.bind(this, "hosu")}
               />
               <HelperText
                 style={[
-                  isValHosu
+                  inputs.hosu.isValid
                     ? { color: COLORS.second }
                     : { color: COLORS.highlight },
                 ]}
-                type={isValHosu ? "info" : "error"}
-                visible={visible}
+                type={inputs.hosu.isValid ? "info" : "error"}
+                visible={inputs.hosu.value !== ""}
               >
-                {isValHosu ? "좋아요!" : "0으로 시작할 수 없습니다."}
+                {inputs.hosu.isValid ? "좋아요!" : "0으로 시작할 수 없습니다."}
               </HelperText>
             </View>
           </View>
