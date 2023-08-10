@@ -10,15 +10,6 @@ import RNPickerSelect from "react-native-picker-select";
 import COLORS from "../constants/colors";
 import Button from "../components/Button";
 
-interface SignupData {
-  aptName: string; // Apt. Name
-  name: string; // Name
-  phoneNum: Int16Array; // 전화번호     Login에도 사용
-  carNum: string; // 자동차번호   Login에도 사용
-  dong: Int16Array; // 동
-  hosu: Int16Array; // 호수
-}
-
 const DATA = [
   { label: "세양청마루아파트", value: "세양청마루아파트" },
   { label: "마젤란아파트", value: "마젤란아파트" },
@@ -26,7 +17,11 @@ const DATA = [
   { label: "목동블랙하이츠", value: "목동블랙하이츠" },
 ];
 
-const Signup = () => {
+const Signup = (navigation) => {
+  const someData = "Hello my Mr. Yesterday";
+  const sendDataToApp = () => {
+    navigation.navigate("App", { someData }); // 데이터를 Welcome 화면으로 전달
+  };
   const [inputs, setInputs] = React.useState({
     aptName: {
       value: "",
@@ -123,7 +118,14 @@ const Signup = () => {
       ? setDisabled(false)
       : setDisabled(true);
     console.log("dong", inputs.dong.isValid, inputs.dong.value);
-  }, [inputs.aptName, inputs.name, inputs.dong, inputs.hosu]);
+  }, [
+    inputs.aptName,
+    inputs.name,
+    inputs.carNum,
+    inputs.phoneNum,
+    inputs.dong,
+    inputs.hosu,
+  ]);
 
   const submitSignup = () => {
     Alert.alert(`입력하신 정보가 맞습니까?`, `맞다면 확인을 눌러주세요.`, [
@@ -132,7 +134,7 @@ const Signup = () => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "확인", onPress: () => console.log("OK Pressed") },
+      { text: "확인", onPress: () => console.log(inputs) },
     ]);
   };
 
