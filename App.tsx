@@ -30,7 +30,7 @@ import COLORS from "./constants/colors";
 //   });
 
 export default function App() {
-  const homeis = false;
+  const homeis = true;
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={homeis ? "Home" : "Welcome"}>

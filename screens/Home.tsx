@@ -31,20 +31,52 @@ const Home = () => {
             <Text>충전 완료!</Text>
           </View>
         </LinearGradient>
+        <Image
+          source={require("../assets/electricity.png")}
+          style={{
+            position: "absolute",
+            bottom: -25,
+            left: "50%",
+            transform: [{ translateX: -25 }],
+            zIndex: 1,
+          }}
+        />
       </View>
       <View style={styles.bgBox}>
-        <View style={styles.recentParkBox}>
-          <Text>현재 주차 위치</Text>
-          <Text>B4 3번</Text>
-          <Text>12하 5678</Text>
-        </View>
-        <View>
-          <View>
-            <Text>배터리 온도</Text>
-            <Text>주의</Text>
+        <View style={{ flex: 1 }}>
+          {/* margin을 위한 View */}
+          <View style={{ flex: 1.2 }}></View>
+
+          <View style={[styles.recentParkBox, { flex: 1 }]}>
+            <Text
+              style={[
+                styles.boxDesc,
+                { fontSize: 16, fontWeight: "bold", color: COLORS.black },
+              ]}
+            >
+              현재 주차 위치
+            </Text>
+            <Text
+              style={[
+                styles.boxDesc,
+                { fontWeight: "bold", fontSize: 40, color: COLORS.second },
+              ]}
+            >
+              B4 3번
+            </Text>
+            <Text style={[styles.boxDesc, { fontSize: 21, fontWeight: "500" }]}>
+              12하 5678
+            </Text>
           </View>
-          <View>
-            <Text>유해가스</Text>
+          <View style={{ flex: 2 }}>
+            <View>
+              <Text>배터리 온도</Text>
+              <Text>주의</Text>
+            </View>
+            <View>
+              <Text>유해가스</Text>
+              <Text>안전</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -64,13 +96,12 @@ const styles = StyleSheet.create({
   },
   bgBox: {
     flex: 5,
-    width: "100%", // 화면 전체로 설정
     backgroundColor: "white",
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     alignItems: "center",
     shadowColor: COLORS.black,
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
   },
   chargeArea: {
     width: 230,
@@ -104,8 +135,19 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   recentParkBox: {
-    backgroundColor: "red",
+    width: 350,
+    justifyContent: "center",
+    borderRadius: 20,
+    shadowOpacity: 0.125,
+    shadowColor: COLORS.black,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    backgroundColor: "white",
+    textAlign: "center",
   },
+  boxDesc: { textAlign: "center" },
 });
 
 export default Home;
