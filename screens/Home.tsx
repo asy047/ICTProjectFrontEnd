@@ -4,6 +4,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 
 const Home = () => {
+  const temp = 0;
+  const gas = 0;
   return (
     <View style={styles.container}>
       <View style={styles.imageArea}>
@@ -47,7 +49,7 @@ const Home = () => {
           {/* margin을 위한 View */}
           <View style={{ flex: 1.2 }}></View>
 
-          <View style={[styles.recentParkBox, { flex: 1 }]}>
+          <View style={[styles.recentParkBox, styles.boxesStyle, { flex: 1 }]}>
             <Text
               style={[
                 styles.boxDesc,
@@ -68,14 +70,16 @@ const Home = () => {
               12하 5678
             </Text>
           </View>
-          <View style={{ flex: 2 }}>
-            <View>
-              <Text>배터리 온도</Text>
-              <Text>주의</Text>
+          <View style={{ flex: 2, flexDirection: "row", marginTop: 10 }}>
+            <View style={[{ flex: 1 }, styles.boxesStyle]}>
+              <Text style={[styles.boxDesc, styles.subBoxHeader]}>
+                배터리 온도
+              </Text>
+              {temp >= 0 ? <Text>안전</Text> : <Text>주의</Text>}
             </View>
-            <View>
-              <Text>유해가스</Text>
-              <Text>안전</Text>
+            <View style={[{ flex: 1 }, styles.boxesStyle]}>
+              <Text style={styles.boxDesc}>유해가스</Text>
+              {gas >= 0 ? <Text>안전</Text> : <Text>위험</Text>}
             </View>
           </View>
         </View>
@@ -136,7 +140,11 @@ const styles = StyleSheet.create({
   },
   recentParkBox: {
     width: 350,
+  },
+  boxesStyle: {
     justifyContent: "center",
+    backgroundColor: "white",
+    textAlign: "center",
     borderRadius: 20,
     shadowOpacity: 0.125,
     shadowColor: COLORS.black,
@@ -144,10 +152,11 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    backgroundColor: "white",
-    textAlign: "center",
   },
   boxDesc: { textAlign: "center" },
+  subBoxHeader: {},
+  safeStyle: {},
+  warningStyle: {},
 });
 
 export default Home;
