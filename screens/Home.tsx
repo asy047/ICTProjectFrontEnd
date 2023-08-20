@@ -1,9 +1,23 @@
 import React from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import CenterText from "../components/CenterText";
 import COLORS from "../constants/colors";
+import * as Notifications from "expo-notifications";
 
 const Home = () => {
+  function scheduleNotificationHandler() {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "My first local notification",
+        body: "This is the body of the notification",
+        data: { userName: "Max" },
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  }
   const temp = 0;
   const gas = 0;
   return (
@@ -48,7 +62,6 @@ const Home = () => {
         <View style={{ flex: 1 }}>
           {/* margin을 위한 View */}
           <View style={{ flex: 1.2 }}></View>
-
           <View style={[styles.recentParkBox, styles.boxesStyle, { flex: 1 }]}>
             <Text
               style={[
@@ -72,14 +85,32 @@ const Home = () => {
           </View>
           <View style={{ flex: 2, flexDirection: "row", marginTop: 10 }}>
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
-              <Text style={[styles.boxDesc, styles.subBoxHeader]}>
-                배터리 온도
-              </Text>
-              {temp >= 0 ? <Text>안전</Text> : <Text>주의</Text>}
+              <CenterText text="배터리 온도" />
+              {temp >= 0 ? (
+                <View>
+                  <CenterText text="안전" />
+                  <CenterText text="배터리 온도가 낮습니다. 충전을 계속해도 좋습니다." />
+                </View>
+              ) : (
+                <View>
+                  <CenterText text="위험" />
+                  <CenterText text="배터리 온도가 높습니다. 충전을 중단하십시오." />
+                </View>
+              )}
             </View>
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
-              <Text style={styles.boxDesc}>유해가스</Text>
-              {gas >= 0 ? <Text>안전</Text> : <Text>위험</Text>}
+              <CenterText style={styles.boxDesc} text="유해 가스" />
+              {gas >= 0 ? (
+                <View>
+                  <CenterText text="안전" />
+                  <CenterText text="유해가스가 감지되지 않았습니다." />
+                </View>
+              ) : (
+                <View>
+                  <CenterText text="위험" />
+                  <CenterText text="유해가스가 감지되었습니다. 충전을 중단하십시오." />
+                </View>
+              )}
             </View>
           </View>
         </View>
