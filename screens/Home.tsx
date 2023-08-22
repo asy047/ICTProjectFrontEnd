@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet, SafeAreaView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import CenterText from "../components/CenterText";
 import COLORS from "../constants/colors";
@@ -18,8 +18,8 @@ const Home = () => {
       },
     });
   }
-  const temp = 0;
-  const gas = 0;
+  const temp = -1;
+  const gas = -0;
   return (
     <View style={styles.container}>
       <View style={styles.imageArea}>
@@ -51,7 +51,7 @@ const Home = () => {
           source={require("../assets/electricity.png")}
           style={{
             position: "absolute",
-            bottom: -25,
+            bottom: -20,
             left: "50%",
             transform: [{ translateX: -25 }],
             zIndex: 1,
@@ -83,16 +83,22 @@ const Home = () => {
               12하 5678
             </Text>
           </View>
-          <View style={{ flex: 2, flexDirection: "row", marginTop: 10 }}>
+          <SafeAreaView
+            style={{ flex: 2, flexDirection: "row", marginTop: 10 }}
+          >
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
               <CenterText text="배터리 온도" />
               {temp >= 0 ? (
-                <View>
+                <View
+                  style={{ justifyContent: "center", alignContent: "center" }}
+                >
+                  <Image source={require("../assets/battery-safe.png")} />
                   <CenterText text="안전" />
                   <CenterText text="배터리 온도가 낮습니다. 충전을 계속해도 좋습니다." />
                 </View>
               ) : (
                 <View>
+                  <Image source={require("../assets/battery-danger.png")} />
                   <CenterText text="위험" />
                   <CenterText text="배터리 온도가 높습니다. 충전을 중단하십시오." />
                 </View>
@@ -102,17 +108,19 @@ const Home = () => {
               <CenterText style={styles.boxDesc} text="유해 가스" />
               {gas >= 0 ? (
                 <View>
+                  <Image source={require("../assets/gas-safe.png")} />
                   <CenterText text="안전" />
                   <CenterText text="유해가스가 감지되지 않았습니다." />
                 </View>
               ) : (
                 <View>
+                  <Image source={require("../assets/gas-danger.png")} />
                   <CenterText text="위험" />
                   <CenterText text="유해가스가 감지되었습니다. 충전을 중단하십시오." />
                 </View>
               )}
             </View>
-          </View>
+          </SafeAreaView>
         </View>
       </View>
     </View>
@@ -175,7 +183,6 @@ const styles = StyleSheet.create({
   boxesStyle: {
     justifyContent: "center",
     backgroundColor: "white",
-    textAlign: "center",
     borderRadius: 20,
     shadowOpacity: 0.125,
     shadowColor: COLORS.black,
