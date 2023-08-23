@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, SafeAreaView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import CenterText from "../components/CenterText";
 import COLORS from "../constants/colors";
 import * as Notifications from "expo-notifications";
 
@@ -18,7 +17,7 @@ const Home = () => {
       },
     });
   }
-  const temp = -1;
+  const temp = -0;
   const gas = -0;
   return (
     <View style={styles.container}>
@@ -87,37 +86,30 @@ const Home = () => {
             style={{ flex: 2, flexDirection: "row", marginTop: 10 }}
           >
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
-              <CenterText text="배터리 온도" />
+              <Text style={styles.boxDescBold}>배터리</Text>
               {temp >= 0 ? (
-                <View
-                  style={{ justifyContent: "center", alignContent: "center" }}
-                >
-                  <Image source={require("../assets/battery-safe.png")} />
-                  <CenterText text="안전" />
-                  <CenterText text="배터리 온도가 낮습니다. 충전을 계속해도 좋습니다." />
-                </View>
+                <CenteredImage
+                  source={require("../assets/battery-safe.png")}
+                  text="안전"
+                />
               ) : (
-                <View>
-                  <Image source={require("../assets/battery-danger.png")} />
-                  <CenterText text="위험" />
-                  <CenterText text="배터리 온도가 높습니다. 충전을 중단하십시오." />
-                </View>
+                <CenteredImage
+                  source={require("../assets/battery-safe.png")}
+                  text="안전"
+                />
               )}
             </View>
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
-              <CenterText style={styles.boxDesc} text="유해 가스" />
               {gas >= 0 ? (
-                <View>
-                  <Image source={require("../assets/gas-safe.png")} />
-                  <CenterText text="안전" />
-                  <CenterText text="유해가스가 감지되지 않았습니다." />
-                </View>
+                <CenteredImage
+                  source={require("../assets/battery-safe.png")}
+                  text="안전"
+                />
               ) : (
-                <View>
-                  <Image source={require("../assets/gas-danger.png")} />
-                  <CenterText text="위험" />
-                  <CenterText text="유해가스가 감지되었습니다. 충전을 중단하십시오." />
-                </View>
+                <CenteredImage
+                  source={require("../assets/battery-safe.png")}
+                  text="안전"
+                />
               )}
             </View>
           </SafeAreaView>
@@ -126,6 +118,13 @@ const Home = () => {
     </View>
   );
 };
+
+const CenteredImage = ({ source, text }) => (
+  <View style={styles.centerContent}>
+    <Image style={styles.imageStyle} source={source} />
+    <Text style={styles.centerText}>{text}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -137,14 +136,10 @@ const styles = StyleSheet.create({
     position: "relative",
     backgroundColor: "blue",
   },
-  bgBox: {
-    flex: 5,
-    backgroundColor: "white",
-    borderTopRightRadius: 50,
-    borderTopLeftRadius: 50,
-    alignItems: "center",
-    shadowColor: COLORS.black,
-    shadowOpacity: 0.1,
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
   chargeArea: {
     width: 230,
@@ -177,10 +172,33 @@ const styles = StyleSheet.create({
     color: "#39E3B3",
     overflow: "hidden",
   },
+  electricityIcon: {
+    position: "absolute",
+    bottom: -20,
+    left: "50%",
+    transform: [{ translateX: -25 }],
+    zIndex: 1,
+  },
+  bgBox: {
+    flex: 5,
+    backgroundColor: "white",
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
+    alignItems: "center",
+    shadowColor: COLORS.black,
+    shadowOpacity: 0.1,
+  },
   recentParkBox: {
     width: 350,
+    flex: 1.2,
+  },
+  boxesContainer: {
+    flex: 2,
+    flexDirection: "row",
+    marginTop: 10,
   },
   boxesStyle: {
+    flex: 1,
     justifyContent: "center",
     backgroundColor: "white",
     borderRadius: 20,
@@ -190,11 +208,39 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
+    marginHorizontal: 5,
   },
-  boxDesc: { textAlign: "center" },
-  subBoxHeader: {},
-  safeStyle: {},
-  warningStyle: {},
+  boxDescBold: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: COLORS.black,
+    textAlign: "center",
+  },
+  boxDescLarge: {
+    fontWeight: "bold",
+    fontSize: 40,
+    color: COLORS.second,
+    textAlign: "center",
+    marginVertical: 5,
+  },
+  boxDesc: {
+    fontSize: 21,
+    fontWeight: "500",
+    textAlign: "center",
+  },
+  centerContent: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  imageStyle: {
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
+  },
+  centerText: {
+    textAlign: "center",
+    marginVertical: 10,
+  },
 });
 
 export default Home;
