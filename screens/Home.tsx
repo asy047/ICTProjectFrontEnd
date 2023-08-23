@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet, SafeAreaView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 import * as Notifications from "expo-notifications";
+import { transparent } from "react-native-paper/lib/typescript/src/styles/themes/v2/colors";
 
 const Home = () => {
   function scheduleNotificationHandler() {
@@ -35,14 +36,14 @@ const Home = () => {
           end={{ x: 0, y: 1 }} // 끝점 (오른쪽 위)
         >
           <View style={styles.chargeCircle}>
-            {/* <LinearGradient
-                colors={['#39E3B3', '#3CCBCB']} // 그라디언트 색상 배열
-                start={{ x: 1, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 8, overflow: 'hidden' }}
-              > */}
-            <Text style={styles.chargePercent}>100%</Text>
-            {/* </LinearGradient> */}
+            <LinearGradient
+              colors={["#39E3B3", "#3CCBCB"]} // 그라디언트 색상 배열
+              start={{ x: 1, y: 1 }}
+              end={{ x: 1, y: 0 }}
+              style={{ padding: 10, borderRadius: 5 }}
+            >
+              <Text style={styles.chargePercent}>100%</Text>
+            </LinearGradient>
             <Text>충전 완료!</Text>
           </View>
         </LinearGradient>
@@ -91,24 +92,31 @@ const Home = () => {
                 <CenteredImage
                   source={require("../assets/battery-safe.png")}
                   text="안전"
+                  desc={`배터리 온도가 낮습니다.\n충전을 계속해도 좋습니다.`}
                 />
               ) : (
                 <CenteredImage
-                  source={require("../assets/battery-safe.png")}
-                  text="안전"
+                  source={require("../assets/battery-danger.png")}
+                  text="위험"
+                  desc={`배터리 온도가 높습니다.\n충전을 중단하십시오.`}
+                  danger={true}
                 />
               )}
             </View>
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
+              <Text style={styles.boxDescBold}>유해가스</Text>
               {gas >= 0 ? (
                 <CenteredImage
-                  source={require("../assets/battery-safe.png")}
+                  source={require("../assets/gas-safe.png")}
                   text="안전"
+                  desc={`유해가스가\n감지되지 않았습니다.`}
                 />
               ) : (
                 <CenteredImage
-                  source={require("../assets/battery-safe.png")}
-                  text="안전"
+                  source={require("../assets/gas-danger.png")}
+                  text="위험"
+                  desc="유해가스가 검출되었습니다. 환풍구를 가동합니다."
+                  danger={true}
                 />
               )}
             </View>
@@ -119,10 +127,18 @@ const Home = () => {
   );
 };
 
-const CenteredImage = ({ source, text }) => (
+const CenteredImage = ({ source, text, desc, danger }) => (
   <View style={styles.centerContent}>
     <Image style={styles.imageStyle} source={source} />
-    <Text style={styles.centerText}>{text}</Text>
+    <Text
+      style={[
+        styles.boxDescLarge,
+        { color: danger ? COLORS.highlight : COLORS.second },
+      ]}
+    >
+      {text}
+    </Text>
+    <Text style={styles.centerText}>{desc}</Text>
   </View>
 );
 
@@ -167,9 +183,9 @@ const styles = StyleSheet.create({
     borderRadius: 230,
   },
   chargePercent: {
-    fontSize: 36,
+    fontSize: 48,
     fontWeight: "bold",
-    color: "#39E3B3",
+    color: "white",
     overflow: "hidden",
   },
   electricityIcon: {
@@ -209,21 +225,25 @@ const styles = StyleSheet.create({
       height: 4,
     },
     marginHorizontal: 5,
+    paddingHorizontal: 5,
   },
   boxDescBold: {
     fontSize: 16,
     fontWeight: "bold",
     color: COLORS.black,
     textAlign: "center",
+    marginBottom: 20,
   },
   boxDescLarge: {
-    fontWeight: "bold",
-    fontSize: 40,
+    fontWeight: "900",
+    fontSize: 24,
     color: COLORS.second,
     textAlign: "center",
+    letterSpacing: -1,
     marginVertical: 5,
   },
   boxDesc: {
+    flexWrap: "wrap",
     fontSize: 21,
     fontWeight: "500",
     textAlign: "center",
@@ -233,8 +253,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageStyle: {
-    width: 100,
-    height: 100,
     resizeMode: "contain",
   },
   centerText: {
