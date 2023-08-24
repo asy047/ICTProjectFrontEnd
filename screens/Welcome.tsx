@@ -131,6 +131,7 @@ const Welcome = ({ navigation }) => {
             style={{
               marginTop: 20,
             }}
+            disabled={false}
           />
           <View
             style={{

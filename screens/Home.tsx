@@ -1,11 +1,35 @@
-import React from "react";
-import { Text, View, Image, StyleSheet, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 import * as Notifications from "expo-notifications";
-import { transparent } from "react-native-paper/lib/typescript/src/styles/themes/v2/colors";
+import { Button } from "react-native-paper";
+// import { LinearTextGradient } from "react-native-text-gradient";
 
-const Home = () => {
+const Home = ({ navigation }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handlePressIn = () => {
+    setIsHovered(true);
+  };
+
+  const handlePressOut = () => {
+    setIsHovered(false);
+  };
+
+  const buttonStyles = [
+    styles.button,
+    isHovered && styles.hoveredButton, // Apply hover styles when isHovered is true
+  ];
+
   function scheduleNotificationHandler() {
     Notifications.scheduleNotificationAsync({
       content: {
@@ -28,6 +52,39 @@ const Home = () => {
           style={{ width: "100%" }}
         ></Image>
       </View>
+      <SafeAreaView
+        style={{
+          padding: 5,
+          position: "absolute",
+          top: 0,
+          right: 15,
+        }}
+      >
+        <Pressable
+          style={[
+            buttonStyles,
+            {
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+            },
+          ]}
+          onPressIn={() => navigation.navigate("Welcome")}
+        >
+          <Image source={require("../assets/bell.png")} />
+        </Pressable>
+        <TouchableOpacity
+          style={[
+            buttonStyles,
+            {
+              borderBottomLeftRadius: 25,
+              borderBottomRightRadius: 25,
+            },
+          ]}
+          onPressIn={() => navigation.navigate("Login")}
+        >
+          <Image source={require("../assets/profile.png")} />
+        </TouchableOpacity>
+      </SafeAreaView>
       <View style={styles.chargeArea}>
         <LinearGradient
           colors={["#39E3B3", "#3CCBCB"]} // 그라디언트 색상 배열
@@ -36,14 +93,16 @@ const Home = () => {
           end={{ x: 0, y: 1 }} // 끝점 (오른쪽 위)
         >
           <View style={styles.chargeCircle}>
-            <LinearGradient
-              colors={["#39E3B3", "#3CCBCB"]} // 그라디언트 색상 배열
-              start={{ x: 1, y: 1 }}
+            <Text style={[styles.chargePercent]}>100%</Text>
+            {/* <LinearTextGradient
+              style={{ fontWeight: "bold", fontSize: 72 }}
+              locations={[0, 1]}
+              colors={["red", "blue"]}
+              start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{ padding: 10, borderRadius: 5 }}
             >
-              <Text style={styles.chargePercent}>100%</Text>
-            </LinearGradient>
+              <Text>100%</Text>
+            </LinearTextGradient> */}
             <Text>충전 완료!</Text>
           </View>
         </LinearGradient>
@@ -147,6 +206,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
   },
+  button: { flex: 1, padding: 10, backgroundColor: COLORS.white },
+  hoveredButton: {
+    backgroundColor: "#2980b9", // Change background color on hover
+  },
   imageArea: {
     flex: 2,
     position: "relative",
@@ -185,8 +248,8 @@ const styles = StyleSheet.create({
   chargePercent: {
     fontSize: 48,
     fontWeight: "bold",
-    color: "white",
-    overflow: "hidden",
+    color: COLORS.second,
+    letterSpacing: -1,
   },
   electricityIcon: {
     position: "absolute",
@@ -224,8 +287,9 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
+    maxHeight: 225,
     marginHorizontal: 5,
-    paddingHorizontal: 5,
+    padding: 10,
   },
   boxDescBold: {
     fontSize: 16,
