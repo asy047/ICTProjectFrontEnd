@@ -16,15 +16,12 @@ import { Button } from "react-native-paper";
 
 const Home = ({ navigation }) => {
   const [isHovered, setIsHovered] = useState(false);
-
   const handlePressIn = () => {
     setIsHovered(true);
   };
-
   const handlePressOut = () => {
     setIsHovered(false);
   };
-
   const buttonStyles = [
     styles.button,
     isHovered && styles.hoveredButton, // Apply hover styles when isHovered is true
@@ -80,7 +77,7 @@ const Home = ({ navigation }) => {
               borderBottomRightRadius: 25,
             },
           ]}
-          onPressIn={() => navigation.navigate("Login")}
+          onPressIn={() => navigation.navigate("MyPage")}
         >
           <Image source={require("../assets/profile.png")} />
         </TouchableOpacity>

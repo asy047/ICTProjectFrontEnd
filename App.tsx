@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator();
 import { Welcome, Signup, Login } from "./screens";
 import Home from "./screens/Home";
 import COLORS from "./constants/colors";
+import MyPage from "./screens/MyPage";
 
 const apiUrl = "http://localhost:8080/";
 
@@ -97,6 +98,14 @@ export default function App() {
               fontWeight: "bold",
               color: COLORS.black,
             },
+          }}
+        />
+        <Stack.Screen
+          name="MyPage"
+          component={MyPage}
+          options={{
+            headerShown: false,
+            title: "마이페이지",
           }}
         />
       </Stack.Navigator>
