@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -7,25 +7,42 @@ import {
   SafeAreaView,
   Pressable,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 import * as Notifications from "expo-notifications";
-import { Button } from "react-native-paper";
-// import { LinearTextGradient } from "react-native-text-gradient";
+import * as Animatable from "react-native-animatable"; // Import Animatable
 
 const Home = ({ navigation }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [gradientColors, setGradientColors] = useState([
+    COLORS.primary,
+    COLORS.second,
+  ]);
+
+  useEffect(() => {
+    const animationInterval = setInterval(() => {
+      // 매 3초마다 색상 변경
+      setGradientColors((prevColors) =>
+        prevColors[0] === COLORS.primary
+          ? [COLORS.second, COLORS.primary]
+          : [COLORS.primary, COLORS.second]
+      );
+    }, 3000);
+
+    return () => clearInterval(animationInterval);
+  }, []);
+
   const handlePressIn = () => {
     setIsHovered(true);
   };
+
   const handlePressOut = () => {
     setIsHovered(false);
   };
-  const buttonStyles = [
-    styles.button,
-    isHovered && styles.hoveredButton, // Apply hover styles when isHovered is true
-  ];
+
+  const buttonStyles = [styles.button, isHovered && styles.hoveredButton];
 
   function scheduleNotificationHandler() {
     Notifications.scheduleNotificationAsync({
@@ -83,26 +100,19 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       </SafeAreaView>
       <View style={styles.chargeArea}>
-        <LinearGradient
-          colors={["#39E3B3", "#3CCBCB"]} // 그라디언트 색상 배열
-          style={styles.gradient}
-          start={{ x: 1, y: 0 }} // 시작점 (왼쪽 아래)
-          end={{ x: 0, y: 1 }} // 끝점 (오른쪽 위)
-        >
-          <View style={styles.chargeCircle}>
-            <Text style={[styles.chargePercent]}>100%</Text>
-            {/* <LinearTextGradient
-              style={{ fontWeight: "bold", fontSize: 72 }}
-              locations={[0, 1]}
-              colors={["red", "blue"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-            >
-              <Text>100%</Text>
-            </LinearTextGradient> */}
-            <Text>충전 완료!</Text>
-          </View>
-        </LinearGradient>
+        <Animated.View style={styles.gradient}>
+          <LinearGradient
+            colors={gradientColors}
+            style={styles.gradient}
+            start={{ x: 1, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          >
+            <View style={styles.chargeCircle}>
+              <Text style={[styles.chargePercent]}>100%</Text>
+              <Text>충전 완료!</Text>
+            </View>
+          </LinearGradient>
+        </Animated.View>
         <Image
           source={require("../assets/electricity.png")}
           style={{
