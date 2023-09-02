@@ -8,10 +8,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../constants/colors";
 import Button from "../components/Button";
+import { useNavigation } from "@react-navigation/native";
 
 const Login = () => {
+  const navigation = useNavigation();
   const [disabled, setDisabled] = React.useState(true);
-
   const [inputs, setInputs] = React.useState({
     name: {
       value: "",
@@ -38,7 +39,15 @@ const Login = () => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "확인", onPress: () => console.log(inputs) },
+      {
+        text: "확인",
+        onPress: () => {
+          navigation.reset({
+            index: 0, // 스택에서 첫 번째 화면부터 시작
+            routes: [{ name: "Home" }], // Home 화면만 포함
+          });
+        },
+      },
     ]);
   };
 
