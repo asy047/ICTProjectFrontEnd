@@ -16,19 +16,15 @@ import * as Animatable from "react-native-animatable"; // Import Animatable
 
 const Home = ({ navigation }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [gradientColors, setGradientColors] = useState([
-    COLORS.primary,
-    COLORS.second,
-  ]);
+  const [gradientPercent, setGradientPercent] = useState(0);
+  // const [gradientColors, setGradientColors] = useState([
+  //   `rgba(57, 227, 179, 0)`,
+  //   COLORS.second,
+  // ]);
 
   useEffect(() => {
     const animationInterval = setInterval(() => {
-      // 매 3초마다 색상 변경
-      setGradientColors((prevColors) =>
-        prevColors[0] === COLORS.primary
-          ? [COLORS.second, COLORS.primary]
-          : [COLORS.primary, COLORS.second]
-      );
+      setGradientPercent((current) => (current === 1.0 ? 0.2 : 1.0));
     }, 3000);
 
     return () => clearInterval(animationInterval);
@@ -102,14 +98,23 @@ const Home = ({ navigation }) => {
       <View style={styles.chargeArea}>
         <Animated.View style={styles.gradient}>
           <LinearGradient
-            colors={gradientColors}
+            colors={[
+              `rgba(57, 227, 179, ${gradientPercent})`,
+              `rgba(60, 203, 203, ${
+                gradientPercent < 0.5 ? gradientPercent : 1
+              })`,
+            ]}
             style={styles.gradient}
             start={{ x: 1, y: 0 }}
             end={{ x: 0, y: 1 }}
           >
             <View style={styles.chargeCircle}>
-              <Text style={[styles.chargePercent]}>100%</Text>
-              <Text>충전 완료!</Text>
+              <Text style={[styles.chargePercent]}>
+                {gradientPercent === 1.0 ? "100%" : gradientPercent * 100 + "%"}
+              </Text>
+              <Text>
+                {gradientPercent === 1.0 ? "충전 완료!" : "충전 중..."}
+              </Text>
             </View>
           </LinearGradient>
         </Animated.View>
