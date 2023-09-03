@@ -42,6 +42,7 @@ const Login = () => {
       {
         text: "확인",
         onPress: () => {
+          console.log(inputs);
           navigation.reset({
             index: 0, // 스택에서 첫 번째 화면부터 시작
             routes: [{ name: "Home" }], // Home 화면만 포함

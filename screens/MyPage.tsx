@@ -46,7 +46,7 @@ const MyPage = () => {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
-        { text: "확인", onPress: () => console.log("logout") },
+        { text: "확인", onPress: () => console.log("signout") },
       ]
     );
   };

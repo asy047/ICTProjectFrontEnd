@@ -35,7 +35,7 @@ const apiUrl = "http://localhost:8080/";
 //   });
 
 export default function App() {
-  const homeis = true;
+  const homeis = false;
   // 요청받은 정보를 담아줄 변수 선언
   const [testStr, setTestStr] = useState("");
 
