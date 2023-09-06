@@ -72,7 +72,7 @@ const Login = () => {
     <SafeAreaView style={styles.container}>
       <View
         style={{
-          flex: 5,
+          flex: 1,
         }}
       >
         <PaperProvider>
@@ -149,7 +149,7 @@ const Login = () => {
           </HelperText>
         </PaperProvider>
       </View>
-      <View style={{ flex: 7 }}>
+      <View style={{ marginBottom: 20 }}>
         <Button
           onPress={() => {
             submitLogin();

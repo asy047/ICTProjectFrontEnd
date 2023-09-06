@@ -10,29 +10,27 @@ import Home from "./screens/Home";
 import COLORS from "./constants/colors";
 import MyPage from "./screens/MyPage";
 
-const apiUrl = "http://localhost:8080/";
+const apiUrl = "https://203.249.39.163:8080/";
 
-// axios
-//   .get(`${apiUrl}/`)
-//   .then((response) => {
-//     console.log(response.data); // 백엔드에서 받아온 데이터 처리
-//   })
-//   .catch((error) => {
-//     console.error("Error fetching data:", error);
-//   });
+axios
+  .get(`${apiUrl}/`)
+  .then((response) => {
+    console.log(response.data); // 백엔드에서 받아온 데이터 처리
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
 
-// // POST 요청 예시
-// const requestData = {
-
-// };
-// axios
-//   .post(`${apiUrl}/`, requestData)
-//   .then((response) => {
-//     console.log(response.data); // 백엔드에서 받아온 응답 처리
-//   })
-//   .catch((error) => {
-//     console.error("Error posting data:", error);
-//   });
+// POST 요청 예시
+const requestData = {};
+axios
+  .post(`${apiUrl}/`, requestData)
+  .then((response) => {
+    console.log(response.data); // 백엔드에서 받아온 응답 처리
+  })
+  .catch((error) => {
+    console.error("Error posting data:", error);
+  });
 
 export default function App() {
   const homeis = true;
