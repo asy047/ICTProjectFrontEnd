@@ -113,11 +113,10 @@ const Signup = (navigation) => {
     inputs.name.isValid &&
     inputs.phoneNum.isValid &&
     inputs.carNum.isValid &&
-    inputs.dong.isValid &&
-    inputs.hosu.isValid
+    (inputs.dong.isValid || inputs.hosu.isValid)
       ? setDisabled(false)
       : setDisabled(true);
-    console.log("dong", inputs.dong.isValid, inputs.dong.value);
+    console.log(disabled);
   }, [
     inputs.aptName,
     inputs.name,
@@ -161,6 +160,58 @@ const Signup = (navigation) => {
         </View>
 
         <PaperProvider>
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ flex: 1, marginRight: 5 }}>
+              <TextInput
+                style={[styles.TextInputStyle]}
+                underlineColor={COLORS.second}
+                activeUnderlineColor={COLORS.second}
+                selectionColor={COLORS.primary}
+                label="동"
+                keyboardType="numeric" // 숫자 키패드 설정
+                value={inputs.dong.value}
+                onChangeText={inputChangeHandler.bind(this, "dong")}
+              />
+              <HelperText
+                style={[
+                  inputs.dong.isValid
+                    ? { color: COLORS.second }
+                    : { color: COLORS.highlight },
+                ]}
+                type={inputs.dong.isValid ? "info" : "error"}
+                visible={inputs.dong.value !== ""}
+              >
+                {inputs.dong.isValid ? "좋아요!" : "0으로 시작할 수 없습니다."}
+              </HelperText>
+            </View>
+            <View style={{ flex: 1, marginLeft: 5 }}>
+              <TextInput
+                style={[styles.TextInputStyle]}
+                underlineColor={COLORS.second}
+                activeUnderlineColor={COLORS.second}
+                selectionColor={COLORS.primary}
+                label="호수"
+                keyboardType="numeric" // 숫자 키패드 설정
+                value={inputs.hosu.value}
+                onChangeText={inputChangeHandler.bind(this, "hosu")}
+              />
+              <HelperText
+                style={[
+                  inputs.hosu.isValid
+                    ? { color: COLORS.second }
+                    : { color: COLORS.highlight },
+                ]}
+                type={inputs.hosu.isValid ? "info" : "error"}
+                visible={inputs.hosu.value !== ""}
+              >
+                {inputs.hosu.isValid ? "좋아요!" : "0으로 시작할 수 없습니다."}
+              </HelperText>
+            </View>
+          </View>
           {/* Name Input */}
           {/* <FormTextInput /> */}
           <TextInput
@@ -235,66 +286,9 @@ const Signup = (navigation) => {
               ? "좋아요!"
               : "띄어쓰기를 제외하고 입력해주세요!"}
           </HelperText>
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            {/* 빈커밋 */}
-            <View style={{ flex: 1, marginRight: 5 }}>
-              <TextInput
-                style={[styles.TextInputStyle]}
-                underlineColor={COLORS.second}
-                activeUnderlineColor={COLORS.second}
-                selectionColor={COLORS.primary}
-                label="동"
-                keyboardType="numeric" // 숫자 키패드 설정
-                value={inputs.dong.value}
-                onChangeText={inputChangeHandler.bind(this, "dong")}
-              />
-              <HelperText
-                style={[
-                  inputs.dong.isValid
-                    ? { color: COLORS.second }
-                    : { color: COLORS.highlight },
-                ]}
-                type={inputs.dong.isValid ? "info" : "error"}
-                visible={inputs.dong.value !== ""}
-              >
-                {inputs.dong.isValid ? "좋아요!" : "0으로 시작할 수 없습니다."}
-              </HelperText>
-            </View>
-            <View style={{ flex: 1, marginLeft: 5 }}>
-              <TextInput
-                style={[styles.TextInputStyle]}
-                underlineColor={COLORS.second}
-                activeUnderlineColor={COLORS.second}
-                selectionColor={COLORS.primary}
-                label="호수"
-                keyboardType="numeric" // 숫자 키패드 설정
-                value={inputs.hosu.value}
-                onChangeText={inputChangeHandler.bind(this, "hosu")}
-              />
-              <HelperText
-                style={[
-                  inputs.hosu.isValid
-                    ? { color: COLORS.second }
-                    : { color: COLORS.highlight },
-                ]}
-                type={inputs.hosu.isValid ? "info" : "error"}
-                visible={inputs.hosu.value !== ""}
-              >
-                {inputs.hosu.isValid ? "좋아요!" : "0으로 시작할 수 없습니다."}
-              </HelperText>
-            </View>
-          </View>
         </PaperProvider>
       </View>
-      <View
-        style={{
-          flex: 2,
-        }}
-      >
+      <View style={{ marginBottom: 20 }}>
         <Button
           onPress={() => {
             submitSignup();

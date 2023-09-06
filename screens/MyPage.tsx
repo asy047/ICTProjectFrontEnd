@@ -1,10 +1,20 @@
-import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  Alert,
+  Dimensions,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 import SIZE from "../constants/size";
 import Swiper from "react-native-swiper";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const MyPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -85,7 +95,7 @@ const MyPage = () => {
         </View>
         <View style={styles.swiperContainer}>
           <Swiper
-            height={155}
+            height={windowHeight / 5}
             activeDotColor={COLORS.black}
             dotColor={COLORS.grey}
             dotStyle={{ marginTop: -20 }}

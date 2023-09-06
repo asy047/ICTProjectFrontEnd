@@ -8,11 +8,17 @@ import {
   Pressable,
   TouchableOpacity,
   Animated,
+  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 import * as Notifications from "expo-notifications";
 import * as Animatable from "react-native-animatable"; // Import Animatable
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+const heightBy = windowHeight / 3.5;
+console.log(heightBy);
 
 const Home = ({ navigation }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,7 +30,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const animationInterval = setInterval(() => {
-      setGradientPercent((current) => (current === 1.0 ? 0.2 : 1.0));
+      setGradientPercent((current) => (current === 1.0 ? 0.8 : 1.0));
     }, 3000);
 
     return () => clearInterval(animationInterval);
@@ -233,14 +239,15 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   chargeArea: {
-    width: 230,
-    height: 230,
+    flex: 1,
+    width: heightBy + 8,
+    height: heightBy + 8,
     zIndex: 1,
     position: "absolute",
-    top: "20%",
-    left: "20%",
     justifyContent: "center",
     alignItems: "center",
+    left: (windowWidth - (heightBy + 8)) / 2, // 화면 가로 중앙으로 정렬
+    top: heightBy / 2, // 화면 세로 중앙으로 정렬
   },
   gradient: {
     width: "100%",
@@ -253,8 +260,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
-    width: "96%",
-    height: "96%",
+    width: heightBy,
+    height: heightBy,
     borderRadius: 230,
   },
   chargePercent: {
