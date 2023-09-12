@@ -9,6 +9,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../constants/colors";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+const apiUrl = "https://13f3-203-249-39-175.ngrok-free.app";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -47,6 +49,18 @@ const Login = () => {
             index: 0, // 스택에서 첫 번째 화면부터 시작
             routes: [{ name: "Home" }], // Home 화면만 포함
           });
+          // axios
+          //   .post(`${apiUrl}/api/parkingLot/carInfoSave`, {
+          //     batValue: inputs.phoneNum.value,
+          //     carColor: inputs.name.value,
+          //     carNum: inputs.carNum.value,
+          //   })
+          //   .then((response) => {
+          //     console.log(response.data); // 백엔드에서 받아온 응답 처리
+          //   })
+          //   .catch((error) => {
+          //     console.error("Error posting data:", error);
+          //   });
         },
       },
     ]);
