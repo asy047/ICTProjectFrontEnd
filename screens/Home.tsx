@@ -9,9 +9,12 @@ import {
   TouchableOpacity,
   Animated,
   Dimensions,
+  Button,
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
+import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import * as Animatable from "react-native-animatable"; // Import Animatable
 
@@ -27,12 +30,73 @@ const Home = ({ navigation }) => {
   //   `rgba(57, 227, 179, 0)`,
   //   COLORS.second,
   // ]);
+  const [status, setStatus] = useState({
+    gas: true,
+    temp: true,
+  });
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    const alertGasTemp = setInterval(() => {
+      setStatus((prevStatus) => ({
+        gas: !prevStatus.gas,
+        temp: !prevStatus.temp,
+      }));
+    }, 3000);
+
+    // 컴포넌트가 언마운트될 때 인터벌을 정리합니다.
+    return () => clearInterval(alertGasTemp);
+  }, []);
+
+  useEffect(() => {
+    if (status.gas === true)
+      schedulePushNotification(
+        "유해가스 위험 발생",
+        "현재 충전중인 자동차에 유해가스가 감지되었습니다."
+      );
+    if (status.temp === false)
+      schedulePushNotification(
+        "배터리 위험 발생",
+        "현재 충전중인 자동차의 배터리 온도가 높습니다. 충전을 중단해주십시오."
+      );
+  }, [status]);
 
   useEffect(() => {
     const animationInterval = setInterval(() => {
       setGradientPercent((current) => (current === 1.0 ? 0.8 : 1.0));
     }, 3000);
 
+    // Expo 알림 서비스 초기화
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
     return () => clearInterval(animationInterval);
   }, []);
 
@@ -45,23 +109,27 @@ const Home = ({ navigation }) => {
   };
 
   const buttonStyles = [styles.button, isHovered && styles.hoveredButton];
-
-  function scheduleNotificationHandler() {
-    Notifications.scheduleNotificationAsync({
+  async function schedulePushNotification(title: string, body: string) {
+    await Notifications.scheduleNotificationAsync({
       content: {
-        title: "My first local notification",
-        body: "This is the body of the notification",
-        data: { userName: "Max" },
+        title: title,
+        body: body,
       },
-      trigger: {
-        seconds: 5,
-      },
+      trigger: null,
     });
   }
-  const temp = -0;
-  const gas = -0;
+  // 푸시 알림 보내기 함수
   return (
     <View style={styles.container}>
+      {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>React Native Expo Push 알림 예제</Text>
+        <Button
+          title="Press to schedule a notification"
+          onPress={async () => {
+            await schedulePushNotification();
+          }}
+        />
+      </View> */}
       <View style={styles.imageArea}>
         <Image
           source={require("../assets/homeImage.png")}
@@ -165,7 +233,7 @@ const Home = ({ navigation }) => {
           >
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
               <Text style={styles.boxDescBold}>배터리</Text>
-              {temp >= 0 ? (
+              {status.temp ? (
                 <CenteredImage
                   source={require("../assets/battery-safe.png")}
                   text="안전"
@@ -182,7 +250,7 @@ const Home = ({ navigation }) => {
             </View>
             <View style={[{ flex: 1 }, styles.boxesStyle]}>
               <Text style={styles.boxDescBold}>유해가스</Text>
-              {gas >= 0 ? (
+              {status.gas ? (
                 <CenteredImage
                   source={require("../assets/gas-safe.png")}
                   text="안전"
@@ -343,5 +411,44 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    // Learn more about projectId:
+    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "",
+      })
+    ).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
+}
 
 export default Home;
