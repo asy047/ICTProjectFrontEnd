@@ -1,0 +1,44 @@
+#flowBanner {
+  display: block;
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  position: relative;
+  background: #39e3b3;
+
+  &.danger {
+    background: #ff4333;
+  }
+  &.safe {
+    background: #39e3b3;
+  }
+
+  .bannerArea {
+    p {
+      width: 100%;
+      line-height: 48px;
+      color: #fff;
+      text-align: center;
+      font-weight: 800;
+      font-size: 28px;
+      position: absolute;
+      white-space: nowrap;
+      transform-origin: center;
+    }
+    p.danger {
+      animation: blinkText 1s linear infinite; /* Use blinkText animation */
+    }
+  }
+}
+
+@keyframes blinkText {
+  0% {
+    opacity: 0; /* Make text invisible at the start of animation */
+  }
+  50% {
+    opacity: 1; /* Make text visible for half of the animation duration */
+  }
+  100% {
+    opacity: 0; /* Make text invisible at the end of animation */
+  }
+}

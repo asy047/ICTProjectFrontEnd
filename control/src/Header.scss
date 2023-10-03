@@ -1,0 +1,28 @@
+#header {
+  //   background: red;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  height: 46px;
+  padding: 10px;
+  .headerText {
+    display: flex;
+    flex-flow: row;
+    justify-items: baseline;
+    line-height: 46px;
+    h1 {
+      margin-right: 10px;
+    }
+  }
+  .timeArea {
+    .day {
+      display: inline-block;
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    .time {
+      display: inline-block;
+      font-size: 32px;
+    }
+  }
+}
