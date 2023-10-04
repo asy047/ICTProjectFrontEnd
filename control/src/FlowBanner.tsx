@@ -3,7 +3,7 @@ import "./FlowBanner.scss";
 
 function FlowBanner() {
   return (
-    <div id="flowBanner">
+    <div id="flowBanner" className="danger">
       <div className="bannerArea">
         <p>B3-01에 화재 위험 감지</p>
       </div>

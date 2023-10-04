@@ -8,6 +8,7 @@
 
   &.danger {
     background: #ff4333;
+    animation: blinkText 1s linear infinite; /* Use blinkText animation */
   }
   &.safe {
     background: #39e3b3;
@@ -25,8 +26,7 @@
       white-space: nowrap;
       transform-origin: center;
     }
-    p.danger {
-      animation: blinkText 1s linear infinite; /* Use blinkText animation */
+    .danger {
     }
   }
 }
